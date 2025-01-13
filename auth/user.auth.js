@@ -1,4 +1,6 @@
 const jwt = require("jsonwebtoken")
+const UserModel = require("../models/user.model")
+const userInfo = require("../models/user.info.model")
 const authRouter = require("express").Router();
 
 authRouter.post("/api/auth", (req, res) => {
@@ -8,7 +10,25 @@ authRouter.post("/api/auth", (req, res) => {
         if (err) {
             return res.status(401).send({ acknowledged: false, msg: "Session invalid or expired" })
         }
-        return res.send({ acknowledged: true, data: data })
+
+        UserModel.findOne({_id: data.id}).then((response) => {
+            userInfo.findOne({ user_id: data.id }).then((info) => {
+    
+                const User = {
+                    id: data.id,
+                    username: response.username,
+                    firstName: response.firstName,
+                    lastName: response.lastName,
+                    email: response.email,
+                    image: info.image,
+                    bio: info.bio
+                }
+    
+                return res.send(User);
+    
+            })
+        })
+
     })
 })
 

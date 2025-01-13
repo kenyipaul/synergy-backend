@@ -11,6 +11,7 @@ const { SignupRouter } = require("./controllers/signup.controller")
 const communityRouter = require("./controllers/community.controller")
 const eventRouter = require('./controllers/event.controller')
 const postRouter = require('./controllers/post.controller')
+const userRouter = require('./controllers/user.controller')
 
 dotenv.config();
 const app = express();
@@ -44,6 +45,10 @@ app.post("/api/community/create", communityRouter)
 app.post("/api/posts/", postRouter)
 app.post("/api/post/", postRouter)
 app.get("/api/post/:id", postRouter)
+app.post("/api/post/like", postRouter)
+app.post("/api/post/dislike", postRouter)
+
+app.post("/api/user/update/profile", userRouter);
 
 app.use((req, res) => {
     res.type('text/plain')
