@@ -80,8 +80,9 @@ eventRouter.get("/api/events", (req, res) => {
 
 eventRouter.get("/api/event/:id", (req, res) => {
 
-    const tmp = req.originalUrl.split("/")
-    const admin_id = tmp[tmp.length - 1]
+    // const tmp = req.originalUrl.split("/")
+    // const admin_id = tmp[tmp.length - 1]
+    const admin_id = req.params.id;
 
 
     eventModel.find({ admin: admin_id }).then((response) => {

@@ -7,9 +7,24 @@ const postModel = mongoose.model("posts", mongoose.Schema({
     post_body: { type: "string", default: null },
     post_image: { type: "string", default: null },
     post_likes: { type: "array", default: []  },
-    post_comments: { type: "array", default: [] },
-    post_replies: { type: "array", default: [] },
+    post_replies: [{
+        userId: { type: "string", required: true },
+        userName: { type: "string", required: true },
+        userImage: { type: "string", required: true },
+        postId: { type: "string", required: true },
+        commentId: { type: "string", required: true },
+        reply: { type: "string", required: true },
+        date: { type: "date", default: Date.now() }
+    }],
+    post_comments: [{
+        userId: { type: "string", required: true },
+        userName: { type: "string", required: true },
+        userImage: { type: "string", required: true },
+        postId: { type: "string", required: true },
+        comment: { type: "string", required: true },
+        date: { type: "date", default: Date.now() }
+    }],
     post_date: { type: "date", default: Date.now },
-}))
+}, { timestamps: true }))
 
 module.exports = postModel;

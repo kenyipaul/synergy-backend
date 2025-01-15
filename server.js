@@ -42,11 +42,16 @@ app.get("/api/community/fetch/:id", communityRouter)
 app.post("/api/community/join", communityRouter)
 app.post("/api/community/create", communityRouter)
 
-app.post("/api/posts/", postRouter)
 app.post("/api/post/", postRouter)
+app.post("/api/posts/", postRouter)
 app.get("/api/post/:id", postRouter)
 app.post("/api/post/like", postRouter)
 app.post("/api/post/dislike", postRouter)
+
+app.post("/api/post/comment", postRouter)
+app.get("/api/post/comment/:id", postRouter)
+
+app.post("/api/post/reply", postRouter)
 
 app.post("/api/user/update/profile", userRouter);
 

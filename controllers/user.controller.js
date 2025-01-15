@@ -1,6 +1,5 @@
 const userRouter = require('express').Router();
 const UserModel = require("../models/user.model");
-const userInfo = require("../models/user.info.model")
 
 userRouter.post("/api/user/update/profile", (req, res) => {
 
@@ -14,15 +13,11 @@ userRouter.post("/api/user/update/profile", (req, res) => {
             firstName: response.firstName,
             lastName: response.lastName,
             email: response.email,
+            bio: response.bio,
+            image: response.image
         }
-
-        userInfo.findOne({ user_id: id }).then((info) => {
-            user.bio = info.bio;
-            user.image = info.image
-        }).finally(() => {
-            res.send(user)
-        })
-
+        
+        res.send(user)
     })
 
 })

@@ -10,6 +10,7 @@ const CommunityModel = mongoose.model("communities", mongoose.Schema({
     community_access: { type: "string", required: false },
     community_maturity: { type: "string", default: null },
     community_members: { type: "array", default: [] },
+    community_topics: { type: "number", default: 0 },
     community_date: { type: "date", default: Date.now }
 }))
 

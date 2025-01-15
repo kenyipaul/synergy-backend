@@ -1,42 +1,33 @@
 const fs = require("fs")
 const bcrypt = require("bcrypt")
 const multer = require("multer")
-const SignupRouter = require('express').Router();
+const sharp = require("sharp")
 const User = require("../models/user.model")
-const UserInfo = require("../models/user.info.model")
+const SignupRouter = require('express').Router();
 
 const upload = multer({ dest: "assets/profile_pictures/" })
 
 SignupRouter.post("/api/signup", upload.single("image"), (req, res) => {
     const { username, firstName, lastName, email, password, image, dob } = req.body
+    const imageName = image ? `assets/profile_pictures/${username}_${new Date().getTime()}.jpg` : "assets/profile_pictures/default.jpg"
     const hashedPassword = bcrypt.hashSync(password, 10);
-    const imageName = image ? `assets/profile_pictures/${username}_${new Date().getTime()}.jpg` : ""
+
+
+    if (image) {
+        const imageBuffer = Buffer.from(image.split(",")[1], "base64")
+
+        sharp(imageBuffer).resize(500, 500).toFile(imageName, (err, info) => {
+            if (err) {
+                imageName = ""
+                res.status(500).send({ msg: "Something went wrong when uploading image" })
+            }
+        })
+    }
 
     User.create({
-        username,
-        firstName,
-        lastName,
-        email,
-        password: hashedPassword
-    }).then((response) => {
-        const userId = response._id.toString();
-
-        if (image) {
-            const imageBuffer = Buffer.from(image.split(",")[1], "base64")
-    
-            fs.writeFile(imageName, imageBuffer, "base64", (err, data) => {
-                console.log(err, data)
-            });
-        }
-
-        UserInfo.create({ 
-            user_id: userId, 
-            dob: dob,
-            image: imageName
-        })
-
-        return res.send({ acknowledged: true, msg: "Signup Successful" })
-
+        username, firstName, lastName, email, dob: dob, password: hashedPassword, image: imageName
+    }).then(() => {
+        return res.send({ accepted: true, msg: "Signup Successful" })
     }).catch((error) => {
         if (error.code == 11000) {
             let keyPattern = Object.keys(error.keyPattern)[0]

@@ -6,7 +6,10 @@ const User = mongoose.model("users", mongoose.Schema({
     lastName: { type: "string", required: true },
     email: { type: "string", required: true, unique: true },
     password: { type: "string", required: true },
-    verified: { type: "boolean", default: false },
+    dob: { type: "string", default: null },
+    image: { type: "string", default: null },
+    cover: { type: "string", default: null },
+    bio: { type: "string", default: null },
 }))
 
 module.exports = User;

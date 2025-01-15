@@ -90,8 +90,9 @@ communityRouter.get("/api/community/fetch", (req, res) => {
 
 communityRouter.get("/api/community/fetch/:id", (req, res) => {
 
-    const tmp = req.originalUrl.split("/")
-    const community_id = tmp[tmp.length - 1]
+    // const tmp = req.originalUrl.split("/")
+    // const community_id = tmp[tmp.length - 1]
+    const community_id = req.params.id;
 
     CommunityModel.findOne({ _id: community_id }).then((response) => {        
         res.send(response)

@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken")
 const UserModel = require("../models/user.model")
-const userInfo = require("../models/user.info.model")
 const authRouter = require("express").Router();
 
 authRouter.post("/api/auth", (req, res) => {
@@ -12,21 +11,19 @@ authRouter.post("/api/auth", (req, res) => {
         }
 
         UserModel.findOne({_id: data.id}).then((response) => {
-            userInfo.findOne({ user_id: data.id }).then((info) => {
     
-                const User = {
-                    id: data.id,
-                    username: response.username,
-                    firstName: response.firstName,
-                    lastName: response.lastName,
-                    email: response.email,
-                    image: info.image,
-                    bio: info.bio
-                }
+            const User = {
+                id: response._id,
+                username: response.username,
+                firstName: response.firstName,
+                lastName: response.lastName,
+                email: response.email,
+                image: response.image,
+                bio: response.bio
+            }
+
+            return res.send(User);
     
-                return res.send(User);
-    
-            })
         })
 
     })
