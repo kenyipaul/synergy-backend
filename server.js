@@ -76,8 +76,9 @@ const io = socket(server, {
 
 io.on('connection', (socket) => {
     
-    socket.on('uploaded-event', () => {
+    socket.on('add', (user) => {
         socket.emit('event-uploaded')
+        console.log(user)
     })
 
 })
