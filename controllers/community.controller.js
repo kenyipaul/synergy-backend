@@ -89,9 +89,6 @@ communityRouter.get("/api/community/fetch", (req, res) => {
 })
 
 communityRouter.get("/api/community/fetch/:id", (req, res) => {
-
-    // const tmp = req.originalUrl.split("/")
-    // const community_id = tmp[tmp.length - 1]
     const community_id = req.params.id;
 
     CommunityModel.findOne({ _id: community_id }).then((response) => {        
@@ -106,12 +103,26 @@ communityRouter.post("/api/community/join", (req, res) => {
     const { community_id, user_id } = req.body;
     
     CommunityModel.updateOne({ _id: community_id }, { $push: { community_members: user_id } }).then((response) => {
-        if (response.acknowledged)
-            res.send({ accepted: true, msg: "Community joined successfully" })
+        // if (response.acknowledged)
+
+        //     res.send({ accepted: true, msg: "Community joined successfully" })
+        CommunityModel.findOne({_id: community_id}).then((response) => {
+            console.log(response)
+        }).catch((error) => {
+            return res.status(500).send({ msg: "Failed to fetch communities, something went wrong" })
+        })
     }).catch((error) => {
         console.log(error)
     })
+    
+})
 
+communityRouter.post("/api/community/leave", (req, res) => {
+    const { community_id, user_id } = req.body;
+
+    CommunityModel.updateOne({ _id: community_id }, { $pull: { community_members: user_id } }).then((response) => {
+        return res.send({ msg: "You have successfully left this community" })
+    })
 })
 
 module.exports = communityRouter;

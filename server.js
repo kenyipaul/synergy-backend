@@ -40,6 +40,7 @@ app.get("/api/event/:id", eventRouter)
 app.get("/api/community/fetch", communityRouter)
 app.get("/api/community/fetch/:id", communityRouter)
 app.post("/api/community/join", communityRouter)
+app.post("/api/community/leave", communityRouter)
 app.post("/api/community/create", communityRouter)
 
 app.post("/api/post/", postRouter)
