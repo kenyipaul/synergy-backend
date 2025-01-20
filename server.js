@@ -68,7 +68,7 @@ const server = app.listen(PORT, err => {
 
 const io = socket(server, {
     cors: {
-        origin: "*",
+        origin: "https://sy-nergy.vercel.app/#/",
         credentials: true
     }
 })
