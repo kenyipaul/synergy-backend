@@ -13,7 +13,7 @@ authRouter.post("/api/auth", (req, res) => {
         UserModel.findOne({_id: data.id}).then((response) => {
     
             const User = {
-                id: response._id,
+                id: response._id, 
                 username: response.username,
                 firstName: response.firstName,
                 lastName: response.lastName,

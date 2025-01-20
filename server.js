@@ -75,10 +75,16 @@ const io = socket(server, {
 
 
 io.on('connection', (socket) => {
-    
-    socket.on('add', (user) => {
-        socket.emit('event-uploaded')
-        console.log(user)
-    })
+    const commHandlers = require("./handlers/comm.socket.handler")
+    const eventHandlers = require("./handlers/event.socket.handler")
+    const postHandlers = require("./handlers/post.socket.handler")
+    const userHandlers  = require("./handlers/user.socket.handler")
+    const accHandlers = require("./handlers/acc.socket.handler")
+
+    commHandlers(socket);
+    eventHandlers(socket);
+    postHandlers(socket);
+    userHandlers(socket);
+    accHandlers(socket);
 
 })

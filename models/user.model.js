@@ -10,6 +10,7 @@ const User = mongoose.model("users", mongoose.Schema({
     image: { type: "string", default: null },
     cover: { type: "string", default: null },
     bio: { type: "string", default: null },
+    resetCode: { type: "string", default: null }
 }))
 
 module.exports = User;

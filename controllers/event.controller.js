@@ -23,18 +23,7 @@ eventRouter.post("/api/event", upload.single("image"), (req, res) => {
             imageName = `${title.replace(/\s/g, "_")}_${Date.now()}.jpg`
         }
 
-        eventModel.create({
-            admin,
-            title,
-            date,
-            description,
-            location,
-            category,
-            poster: image ? `assets/event_covers/${imageName}` : "",
-            tags,
-            website,
-            contact
-        }).then(() => {
+        eventModel.create({ admin, title, date, description, location, category, poster: image ? `assets/event_covers/${imageName}` : "", tags, website, contact }).then(() => {
             if (image) {
 
                 (async () => {
@@ -50,14 +39,6 @@ eventRouter.post("/api/event", upload.single("image"), (req, res) => {
                     }
                 })()
 
-
-                // require("fs").writeFile(`assets/event_covers/${imageName}`, bufferImage, "base64", err => {
-                //     if (err) {
-                //         res.status(500).json({ acknowledged: false, message: "Failed to upload image" })
-                //     } else {
-                //         res.status(201).json({ acknowledged: true, message: "Event created successfully" })
-                //     }
-                // })
             } else {
                 return res.status(201).json({ acknowledged: true, message: "Event created successfully" })
             }
@@ -78,20 +59,20 @@ eventRouter.get("/api/events", (req, res) => {
 })
 
 
-eventRouter.get("/api/event/:id", (req, res) => {
+// eventRouter.get("/api/event/:id", (req, res) => {
 
-    // const tmp = req.originalUrl.split("/")
-    // const admin_id = tmp[tmp.length - 1]
-    const admin_id = req.params.id;
+//     // const tmp = req.originalUrl.split("/")
+//     // const admin_id = tmp[tmp.length - 1]
+//     const admin_id = req.params.id;
 
 
-    eventModel.find({ admin: admin_id }).then((response) => {
-        return res.status(200).json(response)
-    }).catch(err => {
-        res.status(500).json({ message: "Failed to fetch events", error: err })
-    })
+//     eventModel.find({ admin: admin_id }).then((response) => {
+//         return res.status(200).json(response)
+//     }).catch(err => {
+//         res.status(500).json({ message: "Failed to fetch events", error: err })
+//     })
 
-})
+// })
 
 
 module.exports = eventRouter
