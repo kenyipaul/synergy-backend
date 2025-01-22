@@ -13,21 +13,26 @@ module.exports = (socket) => {
     socket.on("auth/user", token => {
         jwt.verify(token, process.env.SECRET_KEY, (err, data) => {
             if (err) {
-                socket.emit("auth/user/response", { error: true,  msg: "Session invalid or expired" })
+                return socket.emit("auth/user/response", { error: true,  msg: "Session invalid or expired" })
             }
     
             userModel.findOne({_id: data.id}).then((response) => {
-                const User = {
-                    id: data.id, 
-                    username: response.username,
-                    firstName: response.firstName,
-                    lastName: response.lastName,
-                    email: response.email,
-                    image: response.image,
-                    bio: response.bio
+                
+                if (response) {
+                    const User = {
+                        id: data.id, 
+                        username: response.username,
+                        firstName: response.firstName,
+                        lastName: response.lastName,
+                        email: response.email,
+                        image: response.image,
+                        bio: response.bio
+                    }
+        
+                    socket.emit("auth/user/response", {error: false, data: User})
+                } else {
+                    return socket.emit("auth/user/response", { error: true,  msg: "Something went wrong when authenticating." })
                 }
-    
-                socket.emit("auth/user/response", {error: false, data: User})
         
             })
     

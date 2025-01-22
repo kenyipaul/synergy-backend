@@ -9,7 +9,7 @@ module.exports = (socket) => {
     // CREATE AN ACCOUNT 
 
     socket.on("user/create/account", data => {
-        const imageName = data.image ? `assets/profile_pictures/${data.username}_${new Date().getTime()}.jpg` : "assets/profile_pictures/default.jpg"
+        let imageName = data.image ? `assets/profile_pictures/${data.username}_${new Date().getTime()}.jpg` : "assets/profile_pictures/default.jpg"
         const hashedPassword = bcrypt.hashSync(data.password, 10);
 
         if (data.image) {

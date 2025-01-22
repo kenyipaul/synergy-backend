@@ -170,11 +170,11 @@ postRouter.post("/api/post/dislike", (req, res) => {
 
 postRouter.post("/api/post/comment", (req, res) => {
 
-    const { userId, postId, comment } = req.body;
+    const { userId, postId, comment, date } = req.body;
 
     
     userModel.findOne({ _id: userId }).then((user) => {
-        const newComment = {userId, userImage: user.image, userName: user.username, postId, comment}
+        const newComment = {userId, userImage: user.image, userName: user.username, postId, comment, date}
         
         postModel.findOneAndUpdate({ _id: postId }, { $push: { post_comments: newComment  } }).then((response) => {
             postModel.findOne({_id: postId}).then((response) => {
@@ -237,7 +237,7 @@ postRouter.get("/api/post/comment/:id", (req, res) => {
 
 postRouter.post("/api/post/reply", (req, res) => {
 
-    const { postId, userId, reply, commId } = req.body;
+    const { postId, userId, reply, commId, date } = req.body;
 
     userModel.findOne({ _id: userId }).then((user) => {
 
@@ -247,7 +247,8 @@ postRouter.post("/api/post/reply", (req, res) => {
             userName: user.username,
             commentId: commId,
             postId,
-            reply
+            reply,
+            date
         }
 
         postModel.findOneAndUpdate({ _id: postId }, { $push: { post_replies: replyObj } }).then((post) => {

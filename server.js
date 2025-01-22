@@ -20,7 +20,7 @@ const PORT = 3303 || process.env.PORT;
 conn();
 app.use(cors({
     origin: "*",
-    credentials: true
+    credentials: false
 }))
 app.use(express.json({ limit: '50mb' }))
 

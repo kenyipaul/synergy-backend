@@ -11,7 +11,7 @@ const EventModel = mongoose.model("events", mongoose.Schema({
     website: { type: "string", default: null },
     contact: { type: "string", default: null },
     tags: { type: "array", default: [] },
-    createdAt: { type: "date", default: Date.now }
+    dateCreated: { type: "string", default: Date.now }
 }))
 
 module.exports = EventModel

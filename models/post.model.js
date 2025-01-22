@@ -14,7 +14,7 @@ const postModel = mongoose.model("posts", mongoose.Schema({
         postId: { type: "string", required: true },
         commentId: { type: "string", required: true },
         reply: { type: "string", required: true },
-        date: { type: "date", default: Date.now() }
+        date: { type: "string", default: Date.now() }
     }],
     post_comments: [{
         userId: { type: "string", required: true },
@@ -22,7 +22,7 @@ const postModel = mongoose.model("posts", mongoose.Schema({
         userImage: { type: "string", required: true },
         postId: { type: "string", required: true },
         comment: { type: "string", required: true },
-        date: { type: "date", default: Date.now() }
+        date: { type: "string", default: Date.now() }
     }],
     post_date: { type: "date", default: Date.now },
 }, { timestamps: true }))

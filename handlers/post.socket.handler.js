@@ -66,5 +66,70 @@ module.exports = (socket) => {
     })
 
 
+    // LIKE POST
+
+    socket.on("/like/post", data => {
+    
+        postModel.updateOne({_id: data.postId}, {$push: { post_likes: data.userId }}).then((response) => {
+            postModel.find({ _id: data.postId }).then((posts) => {
+    
+                let promises = posts.map((post) => {
+                    return userModel.findOne({_id: post.admin_id}).then((user) => {
+                        return {
+                            _id: post._id,
+                            admin_name: user.username,
+                            admin_image: user.image,
+                            post_title: post.post_title,
+                            post_body: post.post_body,
+                            post_image: post.post_image,
+                            post_date: post.post_date,
+                            post_likes: post.post_likes,
+                            post_comments: post.post_comments,
+                            post_replies: post.post_replies,
+                        }
+                    })
+                })
+        
+                Promise.all(promises).then((data) => {
+                    return socket.emit("/like/post/response", {error: false, data: data[0]})
+                })
+        
+            })
+        })
+    })
+
+
+    // dislike
+
+    socket.on("/dislike/post", data => {
+
+        postModel.updateOne({_id: data.postId}, {$pull: { post_likes: data.userId }}).then(() => {
+            postModel.find({ _id: data.postId }).then((posts) => {
+
+                let promises = posts.map((post) => {
+                    return userModel.findOne({_id: post.admin_id}).then((user) => {
+                        return {
+                                _id: post._id,
+                                admin_name: user.username,
+                                admin_image: user.image,
+                                post_title: post.post_title,
+                                post_body: post.post_body,
+                                post_image: post.post_image,
+                                post_date: post.post_date,
+                                post_likes: post.post_likes,
+                                post_comments: post.post_comments,
+                                post_replies: post.post_replies,
+                        }
+                    })
+                })
+        
+                Promise.all(promises).then((data) => {
+                    return socket.emit("/dislike/post/response", {error: false, data: data[0]})
+                })
+        
+            })
+        })
+
+    })
 
 }

@@ -7,7 +7,7 @@ module.exports = (socket) => {
 
     socket.on("/create/event", (event) => {
 
-        const { admin, title, date, description, location, category, image, tags, website, contact } = event
+        const { admin, title, description, location, category, image, tags, website, contact, date, dateCreated } = event
 
         let bufferImage, imageName;
 
@@ -16,7 +16,7 @@ module.exports = (socket) => {
             imageName = `${title.replace(/\s/g, "_")}_${Date.now()}.jpg`
         }
 
-        EventModel.create({ admin, title, date, description, location, category, poster: image ? `assets/event_covers/${imageName}` : "", tags, website, contact }).then((response) => {
+        EventModel.create({ admin, title, date, dateCreated, description, location, category, poster: image ? `assets/event_covers/${imageName}` : "", tags, website, contact }).then((response) => {
             if (image) {
 
                 (async () => {
