@@ -46,11 +46,11 @@ module.exports = (socket) => {
 
     socket.on("user/login", loginData => {
         User.findOne({ email: loginData.email }).then((response) => {
-            
+
             if (response) {
                 bcrypt.compare(loginData.password, response.password, (err, data) => {
                     if (err) return socket.emit("user/login/response", { error: true, msg: "Internal Server Error, Please try again later"})
-    
+
                     if (data) {
                         const User = {
                             id: response._id,
@@ -61,12 +61,14 @@ module.exports = (socket) => {
                             image: response.image,
                             bio: response.bio
                         }
-    
+
                         const token = jwt.sign(User, process.env.SECRET_KEY, { expiresIn: "1d" });
                         return socket.emit("user/login/response", { accepted: true, user: User, token: token });
-    
+
+                    } else {
+                        return socket.emit("user/login/response", { error: true, msg: "Incorrect email or password"})
                     }
-    
+
                 })
             } else {
                 return socket.emit("user/login/response", { error: true, msg: "Incorrect email or password"})

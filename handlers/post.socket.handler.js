@@ -36,40 +36,74 @@ module.exports = (socket) => {
     // FETCH POSTS 
 
     socket.on("/fetch/posts", id => {
+
         postModel.find({ comm_id: id }).then((posts) => {
-            let promises = posts.map((data) => {
-                return userModel.findOne({_id: data.admin_id}).then((user) => {
-                   return {
-                        _id: data._id,
-                        admin_id: user.id,
-                        admin_name: user.username,
-                        admin_image: user.image,
-                        post_title: data.post_title,
-                        post_body: data.post_body,
-                        post_image: data.post_image,
-                        post_date: data.post_date,
-                        post_likes: data.post_likes,
-                        post_comments: data.post_comments,
-                        post_replies: data.post_replies,
-                   }
+
+            let promises = posts.map(data => {
+                return userModel.findOne({ _id: data.admin_id }).then(user => {
+                    if (user) {
+                        return {
+                            id: data._id,
+                            admin_id: data.admin_id,
+                            admin_name: user.username,
+                            admin_image: user.image,
+                            post_title: data.post_title,
+                            post_body: data.post_body,
+                            post_image: data.post_image,
+                            post_date: data.post_date,
+                            post_likes: data.post_likes,
+                            post_comments: data.post_comments,
+                            post_replies: data.post_replies,
+                        }
+                    }
                 })
             })
-    
-    
+
             Promise.all(promises).then((data) => {
                 socket.emit("/fetch/posts/response", { error: false, data })
             })
-            
-        }).catch(() => {
+
+        }).catch((err) => {
+            console.log(err)
             socket.emit("/fetch/posts/response", { error: true, msg: "Failed to fetch posts" })
         })
     })
 
 
+
+    // FETCH POST
+
+    socket.on("/fetch/post", id => {
+        postModel.findOne({_id: id}).then((post) => {
+
+            userModel.findOne({_id: post.admin_id}).then((user) => {
+
+                let post_data = {
+                    _id: post._id,
+                    admin_name: user.username,
+                    admin_image: user.image,
+                    post_title: post.post_title,
+                    post_body: post.post_body,
+                    post_image: post.post_image,
+                    post_date: post.post_date,
+                    post_likes: post.post_likes,
+                    post_comments: post.post_comments,
+                    post_replies: post.post_replies,
+                }
+
+                socket.emit("/fetch/post/response", { error: false, data: post_data })
+
+            })
+
+        })
+    })
+
+
+
     // LIKE POST
 
     socket.on("/like/post", data => {
-    
+
         postModel.updateOne({_id: data.postId}, {$push: { post_likes: data.userId }}).then((response) => {
             postModel.find({ _id: data.postId }).then((posts) => {
     

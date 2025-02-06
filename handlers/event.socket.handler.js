@@ -35,7 +35,7 @@ module.exports = (socket) => {
                 return socket.emit("/create/event/response", {error: false, data: response, msg: "Event posted successfully"});
             }
         }).catch(err => {
-            return socket.emit("/create/event/response", {error: true, data: response, msg: "Failed to post event"});
+            return socket.emit("/create/event/response", {error: true, msg: "Failed to post event"});
         })
 
     })

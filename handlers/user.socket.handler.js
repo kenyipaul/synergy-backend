@@ -63,8 +63,19 @@ module.exports = (socket) => {
     socket.on("user/update/profile", data => {
         userModel.updateOne({_id: data.id}, { $set: { username: data.username, firstName: data.firstName, lastName: data.lastName, email: data.email } }).then((response) => {
             if (response.acknowledged) {
-                userModel.findOne({ _id: data.userId }).then((response) => {
-                    socket.emit("user/update/profile/response", {error: false, data: response, msg: "Profile updated successfully"})
+                userModel.findOne({ _id: data.id }).then((response) => {
+
+                    const User = {
+                        id: data.id,
+                        username: response.username,
+                        firstName: response.firstName,
+                        lastName: response.lastName,
+                        email: response.email,
+                        image: response.image,
+                        bio: response.bio
+                    }
+
+                    socket.emit("user/update/profile/response", {error: false, data: User, msg: "Profile updated successfully"})
                 })
             } else {
                 socket.emit("user/update/profile/response", {error: true, msg: "Failed to update profile"})
